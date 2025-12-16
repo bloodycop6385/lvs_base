@@ -176,10 +176,10 @@ function ENT:LVSHudPaintCarShiftMenu( CornerX, CornerY, w, h, ScrX, ScrY, ply )
 		local mX = math.Clamp( OldX + math.Clamp(MousePosX - OldX,-1,1), xmin + R, xmax - R )
 		local mY = math.Clamp( OldY + math.Clamp(MousePosY - OldY,-1,1), ymin + R, ymax - R )
 
-		local r,g,b,a = render.ReadPixel( mX, OldY )
+		local r,g,b,_ = render.ReadPixel( mX, OldY )
 		if (r+g+b) == 255 * 3 then OldX = mX end
 
-		r,g,b,a = render.ReadPixel( OldX, mY )
+		r,g,b,_ = render.ReadPixel( OldX, mY )
 		if (r+g+b) == 255 * 3 then OldY = mY end
 	end
 
@@ -192,10 +192,13 @@ function ENT:LVSHudPaintCarShiftMenu( CornerX, CornerY, w, h, ScrX, ScrY, ply )
 			EntTable._SelectedGear = index
 
 			if ( EntTable._oldSelectedGear ~= index ) then
-				print ( "Hovering Gear:", index )
 				EntTable._oldSelectedGear = index
 			end
 		else
+			if ( EntTable._oldSelectedGear == index ) then
+				EntTable._oldSelectedGear = nil
+			end
+
 			draw.RoundedBox( 10, originX - 10, originY - 10, 20, 20, Color(255,255,255,255) )
 		end
 
