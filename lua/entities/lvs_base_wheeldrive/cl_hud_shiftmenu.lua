@@ -90,9 +90,24 @@ function ENT:LVSHudPaintCarShiftMenu( CornerX, CornerY, w, h, ScrX, ScrY, ply )
 
 	local MenuOpen = self:IsManualTransmission() and ply:lvsKeyDown( "CAR_CLUTCH" )
 
+	local EntTable = self:GetTable()
+
 	if not MenuOpen then
+		if ( EntTable._oldSelectedGear ~= nil and isnumber( EntTable._SelectedGear ) ) then
+			self:EmitSound("buttons/lightswitch2.wav",75,100,0.25)
+
+			net.Start( "lvs_car_shiftgear" )
+				net.WriteInt( EntTable._SelectedGear, 4 )
+			net.SendToServer()
+
+			EntTable._SelectedGear = nil
+			EntTable._oldSelectedGear = nil
+		end
 
 		HasPixelCaptured = false
+
+		OldX = nil
+		OldY = nil
 
 		return
 	end
@@ -174,6 +189,12 @@ function ENT:LVSHudPaintCarShiftMenu( CornerX, CornerY, w, h, ScrX, ScrY, ply )
 
 		if math.abs(originX - OldX) < 10 and math.abs(originY - OldY) < 10 then
 			draw.RoundedBox( 10, originX - 10, originY - 10, 20, 20, Color(255,0,0,255) )
+			EntTable._SelectedGear = index
+
+			if ( EntTable._oldSelectedGear ~= index ) then
+				print ( "Hovering Gear:", index )
+				EntTable._oldSelectedGear = index
+			end
 		else
 			draw.RoundedBox( 10, originX - 10, originY - 10, 20, 20, Color(255,255,255,255) )
 		end

@@ -5,6 +5,30 @@ if SERVER then
 	util.AddNetworkString( "lvs_toggle_mouseaim" )
 	util.AddNetworkString( "lvs_car_turnsignal" )
 	util.AddNetworkString( "lvs_car_break" )
+	util.AddNetworkString( "lvs_car_shiftgear" )
+
+	net.Receive( "lvs_car_shiftgear", function( len, ply )
+		if not IsValid( ply ) then return end
+
+		local veh = ply:lvsGetVehicle()
+		if not IsValid( veh ) or veh:GetDriver() ~= ply then return end
+
+		local Gear = net.ReadInt( 4 )
+		if ( !isnumber( Gear ) or Gear < 1 ) then return end
+
+		if ( isnumber(veh.TransGears) and Gear > veh.TransGears ) then
+			veh:SetReverse( true )
+			veh:SetNWGear( 1 )
+
+			return
+		end
+
+		if ( veh:GetReverse() ) then
+			veh:SetReverse( false )
+		end
+
+		veh:SetNWGear( Gear )
+	end )
 
 	net.Receive( "lvs_car_turnsignal", function( len, ply )
 		if not IsValid( ply ) then return end
