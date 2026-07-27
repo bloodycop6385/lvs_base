@@ -68,7 +68,7 @@ function EFFECT:Init( data )
 	local Dist = (traceWater.HitPos - Pos):Length()
 	local ply = LocalPlayer():GetViewEntity()
 
-	if not IsValid( ply ) then return end
+	if not IsValid( ply ) then emitter:Finish() return end
 
 	local delay = (Pos - ply:GetPos()):Length() / 13503.9
 
@@ -79,7 +79,7 @@ function EFFECT:Init( data )
 			util.Effect( "WaterSurfaceExplosion", effectdata, true, true )
 		end )
 
-		if Dist > 300 then return end
+		if Dist > 300 then emitter:Finish() return end
 	else
 		timer.Simple( delay, function()
 			sound.Play( "LVS.BULLET_EXPLOSION", Pos )

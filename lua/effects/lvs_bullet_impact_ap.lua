@@ -179,42 +179,42 @@ function EFFECT:Init( data )
 		end
 	end
 
-	if not self.DustSurface[ surfaceName ] then return end
+	if self.DustSurface[ surfaceName ] then
+		for i = 1, 10 do
+			for i = 1, 15 do
+				local particle = emitter:Add( self.SmokeMat[ math.random(1, #self.SmokeMat ) ], pos )
 
-	for i = 1, 10 do
-		for i = 1, 15 do
-			local particle = emitter:Add( self.SmokeMat[ math.random(1, #self.SmokeMat ) ], pos )
+				if not particle then continue end
 
-			if not particle then continue end
+				particle:SetStartAlpha( math.Rand(40, 80) )
+				particle:SetEndAlpha(0)
+				particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
+				particle:SetGravity( Vector(0,0,-math.Rand(75, 150)) )
+				particle:SetRollDelta( math.random(0, 0.5*math.pi) )
+				particle:SetAirResistance( 175 )
 
-			particle:SetStartAlpha( math.Rand(40, 80) )
-			particle:SetEndAlpha(0)
-			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
-			particle:SetGravity( Vector(0,0,-math.Rand(75, 150)) )
-			particle:SetRollDelta( math.random(0, 0.5*math.pi) )
-			particle:SetAirResistance( 175 )
+				particle:SetStartSize( 5 )
+				particle:SetDieTime( math.Rand(0.5, 1) )
+				particle:SetEndSize( math.Rand(15, 30) )
+				particle:SetVelocity( (dir * math.Rand(80, 400) + VectorRand() * 100) * 1.5 )
+			end
+	    
+			for n = 0,6 do
+				local particle = emitter:Add( self.DustMat[ math.random(1,#self.DustMat) ] , pos )
 
-			particle:SetStartSize( 5 )
-			particle:SetDieTime( math.Rand(0.5, 1) )
-			particle:SetEndSize( math.Rand(15, 30) )
-			particle:SetVelocity( (dir * math.Rand(80, 400) + VectorRand() * 100) * 1.5 )
-		end
-    
-		for n = 0,6 do
-			local particle = emitter:Add( self.DustMat[ math.random(1,#self.DustMat) ] , pos )
+				if not particle then continue end
 
-			if not particle then continue end
-
-			particle:SetVelocity( (dir * 50 * i + VectorRand() * 50) )
-			particle:SetDieTime( (i / 8) * DieTime )
-			particle:SetAirResistance( 10 ) 
-			particle:SetStartAlpha( 255 )
-			particle:SetStartSize( 5 )
-			particle:SetEndSize( 10 * i )
-			particle:SetRollDelta( math.Rand(-1,1) )
-			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
-			particle:SetGravity( Vector(0,0,-600) )
-			particle:SetCollide( false )
+				particle:SetVelocity( (dir * 50 * i + VectorRand() * 50) )
+				particle:SetDieTime( (i / 8) * DieTime )
+				particle:SetAirResistance( 10 ) 
+				particle:SetStartAlpha( 255 )
+				particle:SetStartSize( 5 )
+				particle:SetEndSize( 10 * i )
+				particle:SetRollDelta( math.Rand(-1,1) )
+				particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
+				particle:SetGravity( Vector(0,0,-600) )
+				particle:SetCollide( false )
+			end
 		end
 	end
 
